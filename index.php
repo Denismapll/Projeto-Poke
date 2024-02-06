@@ -16,8 +16,8 @@
         .bgwhite {
             background-color: white;
             border-radius: 25px;
-            min-height: 125px;
-            padding: 10px;
+            min-height: 115px;
+            /* padding: 10px; */
             text-align: center;
             min-width: 350px;
             box-shadow: 0px 0px 12px 1px #9f9f9f;
@@ -98,9 +98,7 @@
             right: -3px;
             box-shadow: 1px 2px 4px 0px black;
         }
-        .box-content {
-            height: 80vh;
-        }
+
         .header-img {
             position: fixed;
             top: 0;
