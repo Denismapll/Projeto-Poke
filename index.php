@@ -1,6 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<?php
+include 'connect.php';
+$pokemonDia = "";
+$query = "SELECT * FROM `admin`";
+
+$result = mysqli_query($mysqli, $query);
+$resultCheck = mysqli_num_rows($result);
+
+if ($resultCheck > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        // print_r($row);
+        // echo '<br>';
+        // echo intval(date('dmY'));
+        // echo '<br>';
+
+        if ($row['data'] == intval(date('dmY'))) {
+            // echo 'pokemon do dia é : ' . $row['pokemon'];
+            $pokemonDia = $row['pokemon'];
+        }
+    }
+}
+?>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,6 +52,10 @@
         }
 
         .bgwhite p:first-letter {
+            text-transform: capitalize;
+        }
+
+        h4:first-letter {
             text-transform: capitalize;
         }
 
@@ -76,11 +103,12 @@
 
         .show {
             display: block;
+            text-align: center;
         }
 
         .show-pic {
             display: block;
-            margin: 0 20px 15px;
+            /* margin: 0 20px 15px; */
         }
 
         .no-show {
@@ -100,23 +128,23 @@
         }
 
         .header-img {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 9999;
             background-color: #232323;
-            padding: 10px 0 30px;
+            padding: 30px 0 50px;
         }
 
         .hid-scroll {
-            height: 60vh;
-            overflow-y:auto
+            height: 55vh;
+            overflow-y: auto
         }
 
-        *{
+        .box-content {
+            flex-direction: column-reverse;
+        }
+
+        * {
             scroll-behavior: smooth;
         }
+
         /* Hide scrollbar for Chrome, Safari and Opera */
         .hid-scroll::-webkit-scrollbar {
             display: none;
@@ -136,33 +164,34 @@
         <div class="container">
             <div class="row justify-content-center align-items-center flex-column">
                 <!-- <h1 style="text-align: center; color: white;">PokeDay</h1> -->
-                <img src="./img/pokeday.png" alt="" style="width: 130px; margin: 15px auto;">
+                <img src="./img/pokeday.png" alt="" style="width: 150px; margin: 15px auto;">
                 <input type="text" class="enviar w-25" placeholder="Escreva aqui...">
+                <div class="container flex"
+                    style="height: fit-content; display: flex; justify-content: center; align-items: center; position: relative;">
+                    <div class="d-flex flex-column"
+                        style="background: white; width: 300px; border-radius: 20px; position: absolute; bottom: -86px;">
+                        <div class="d-flex justify-content-center align-items-center search">
+                            <!-- <img class="col-md-2 show-pic" src="" alt="" id="fotoAprox"> -->
+                            <h4 class="col-md-7 no-show" style="font-size: 17px" id="nomeAprox"></h4>
+                        </div>
+                        <div class="d-flex justify-content-center align-items-center search">
+                            <!-- <img class="col-md-2 show-pic" src="" alt="" id="fotoAprox"> -->
+                            <h4 class="col-md-7 no-show" style="font-size: 17px" id="nomeAprox"></h4>
+                        </div>
+                        <div class="d-flex justify-content-center align-items-center search">
+                            <!-- <img class="col-md-2 show-pic" src="" alt="" id="fotoAprox"> -->
+                            <h4 class="col-md-7 no-show" style="font-size: 17px" id="nomeAprox"></h4>
+                        </div>
+                    </div>
+                </div>
                 <button onclick="reset()" style="width: 75px; border-radius: 30px;">Reset</button>
                 <!-- <img src="" alt="" class="img w-25"> -->
             </div>
         </div>
     </section>
 
-    <section style="margin-top: 270px;">
+    <section>
         <div class="container d-flex justify-content-start principal flex-column align-items-center hid-scroll">
-            <div class="container flex"
-                style="height: fit-content; display: flex; justify-content: center; align-items: center;">
-                <div class="d-flex flex-column" style="background: white; width: 300px;     border-radius: 20px;">
-                    <!-- <div class="d-flex justify-content-center align-items-center search">
-                        <img class="col-md-2 show-pic" style="margin: 0 20px 15px" src="" alt="">
-                        <h4 class="col-md-7 show" style="font-size: 25px"></h4>
-                    </div>
-                    <div class="d-flex justify-content-center align-items-center search">
-                        <img class="col-md-2 show-pic" style="margin: 0 20px 15px" src="" alt="">
-                        <h4 class="col-md-7 show" style="font-size: 25px"></h4>
-                    </div>
-                    <div class="d-flex justify-content-center align-items-center search">
-                        <img class="col-md-2 show-pic" style="margin: 0 20px 15px" src="" alt="">
-                        <h4 class="col-md-7 show" style="font-size: 25px"></h4>
-                    </div> -->
-                </div>
-            </div>
             <div class="row col-md-8 col-xs-6 box-content">
             </div>
         </div>
@@ -173,12 +202,16 @@
         const enviar = document.querySelector(".enviar")
         const imagem = document.querySelector(".img")
         const principal = document.querySelector(".principal")
+        const fotoNomesProximos = document.querySelectorAll("#fotoAprox")
+        const nomesProximos = document.querySelectorAll("#nomeAprox")
         const mostrar = document.querySelectorAll('p')
         const bg = document.querySelector("body > section:nth-child(3) > div > div > div");
         const mainContent = document.querySelector("body > section:nth-child(3) > div > div.row.col-md-8.col-xs-6");
         const procurado = document.querySelectorAll('.search');
         var arImg = []
         var arInfo = []
+        var nomesPokemons = []
+        result = nomesPokemons.filter((nomesPokemons) => nomesPokemons.includes("pidg"))
         pokemonDia = ['salazzle', 'poison', 'fire', 12, 22.2, 'VII', 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/758.png']
 
         window.onload = () => {
@@ -218,6 +251,15 @@
                 await buscarTipo(enviar.value);
 
                 arInfo = [];
+                enviar.value = ""
+                if (enviar.value.length == 0) {
+                    nomesProximos.forEach((x, y) => {
+                        x.innerHTML = ""
+                        x.classList.add('no-show')
+                        x.classList.remove('show')
+                    })
+                }
+
                 console.log(arInfo)
             }
         })
@@ -225,9 +267,33 @@
         enviar.addEventListener('input', () => {
             if (enviar.value != "") {
 
-                showNamesProximity(enviar.value);
+                result = nomesPokemons.filter((nomesPokemons) => nomesPokemons.includes(enviar.value))
+                nomesProximos.forEach((x, y) => {
+                    if (result[y]) {
+                        x.innerHTML = result[y]
+                        x.classList.remove('no-show')
+                        x.classList.add('show')
+                    } else {
+                        x.innerHTML = "";
+                    }
+                })
+                // fotoNomesProximos.forEach((x, y) => {
+                //     x.innerHTML = result[y]
+                // })
+                // console.log(result)
+                // showNamesProximity(enviar.value);
+            }
+            if (enviar.value.length == 0 || !result[0]) {
+                nomesProximos.forEach((x, y) => {
+                    x.innerHTML = ""
+                    x.classList.add('no-show')
+                    x.classList.remove('show')
+                })
             }
         })
+
+
+        showNamesProximity(enviar.value)
 
         function buscarTipo(pesq) {
             dat = pesq.toLowerCase();
@@ -287,13 +353,79 @@
                     conferir(pokemonDia)
 
                     console.log("fim")
-                }).then((data)=>{
-                    document.querySelector('.hid-scroll').scroll(0,999999)
+                }).then((data) => {
+                    document.querySelector('.hid-scroll').scroll(0, 0)
                 })
             })
 
         }
 
+        function pokeday(pesq) {
+            dat = pesq.toLowerCase();
+            fetch('https://pokeapi.co/api/v2/pokemon/' + dat).then((response) => response.json()).then((data) => {
+                // console.log(data);
+                infos = data;
+
+                pokemonDia.push(infos.name)
+                pokemonDia.push(infos.types[0].type.name)
+                if (infos.types.length == 2) {
+                    pokemonDia.push(infos.types[1].type.name)
+                } else {
+                    pokemonDia.push(infos.types[0].type.name)
+                }
+                pokemonDia.push(infos.height)
+                pokemonDia.push(infos.weight / 10)
+
+
+                // console.log(infos.name);
+                // console.log(infos.height);
+                // console.log(infos.weight / 10);
+                // infos.types.forEach((x) => { console.log(x.type.name) })
+
+                // imagem.src = infos.sprites.other.home.front_default;
+                // imagem.src = infos.sprites.front_default;
+
+
+            }).then((data) => {
+                fetch('https://pokeapi.co/api/v2/pokemon-species/' + dat).then((response) => response.json()).then((data) => {
+                    // console.log(data);
+                    infos2 = data;
+
+                    // console.log(infos2.generation.name);
+                    pokemonDia.push(infos2.generation.name.slice(11).toUpperCase());
+                    // infos2.types.forEach((x)=>{console.log(x.type.name)})
+                    // imagem.src = infos2.sprites.other.home.front_default;
+                    // imagem.src = infos2.sprites.front_default;
+                    pokemonDia.push(infos.sprites.other.home.front_default);
+
+                    setTimeout(() => {
+                        mostrar.forEach((x, y) => {
+                            x.innerHTML = pokemonDia[y];
+                        })
+
+
+                    }, 50)
+
+                }).then((data) => {
+                    let box = novoBg(pokemonDia)
+                    mainContent.appendChild(box)
+                    y = parseInt(localStorage.tentativa)
+                    y += 1
+                    localStorage.tentativa = y
+                    tentativas = localStorage.tentativa
+                    toStorage(1);
+                    // console.log("fim")
+                    conferir(pokemonDia)
+
+                    console.log("fim")
+                }).then((data) => {
+                    document.querySelector('.hid-scroll').scroll(0, 0)
+                })
+            })
+
+        }
+
+        // pokeday('<?php echo $pokemonDia;?>')
 
         function novoBg(inform) {
 
@@ -462,9 +594,8 @@
                 infoNames = data;
 
                 infoNames.results.forEach((x) => {
-                    if (x.name.includes(dat)) {
-                        // console.log(x.name)
-                    }
+                    nomesPokemons.push(x.name)
+
                 })
             })
 
