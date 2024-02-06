@@ -108,6 +108,28 @@
             background-color: #232323;
             padding: 10px 0 30px;
         }
+
+        .hid-scroll {
+            height: 60vh;
+            overflow-y:auto
+        }
+
+        *{
+            scroll-behavior: smooth;
+        }
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .hid-scroll::-webkit-scrollbar {
+            display: none;
+            overflow-y: auto;
+        }
+
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .hid-scroll {
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+        }
     </style>
 
     <section class="header-img">
@@ -116,13 +138,14 @@
                 <!-- <h1 style="text-align: center; color: white;">PokeDay</h1> -->
                 <img src="./img/pokeday.png" alt="" style="width: 130px; margin: 15px auto;">
                 <input type="text" class="enviar w-25" placeholder="Escreva aqui...">
+                <button onclick="reset()" style="width: 75px; border-radius: 30px;">Reset</button>
                 <!-- <img src="" alt="" class="img w-25"> -->
             </div>
         </div>
     </section>
 
     <section style="margin-top: 270px;">
-        <div class="container d-flex justify-content-center principal flex-column align-items-center">
+        <div class="container d-flex justify-content-start principal flex-column align-items-center hid-scroll">
             <div class="container flex"
                 style="height: fit-content; display: flex; justify-content: center; align-items: center;">
                 <div class="d-flex flex-column" style="background: white; width: 300px;     border-radius: 20px;">
@@ -167,6 +190,16 @@
             // console.log(tentativas)
             conf = document.querySelectorAll('.col-md-2.bg-style')
             conferir(pokemonDia)
+        }
+
+        function reset() {
+            localStorage.clear()
+
+            limp = document.querySelectorAll('.bgwhite')
+
+            limp.forEach((x) => {
+                x.remove()
+            })
         }
 
         var romanos = new Object();
@@ -252,7 +285,10 @@
                     toStorage(1);
                     // console.log("fim")
                     conferir(pokemonDia)
+
                     console.log("fim")
+                }).then((data)=>{
+                    document.querySelector('.hid-scroll').scroll(0,999999)
                 })
             })
 
