@@ -30,146 +30,24 @@ if ($resultCheck > 0) {
     <title>Pokeday</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-
+        <link rel="stylesheet" href="./assets/css/main.css">
 </head>
-
+<header>
+    
+</header>
 <body style="background: #232323;">
 
-    <style>
-        .bgwhite {
-            background-color: white;
-            border-radius: 25px;
-            min-height: 115px;
-            /* padding: 10px; */
-            text-align: center;
-            min-width: 350px;
-            box-shadow: 0px 0px 12px 1px #9f9f9f;
-            margin: 10px auto;
-        }
-
-        .bgwhite p {
-            font-size: 18px;
-        }
-
-        .bgwhite p:first-letter {
-            text-transform: capitalize;
-        }
-
-        h4:first-letter {
-            text-transform: capitalize;
-        }
-
-        .img,
-        .img-storage {
-            width: 90%;
-        }
-
-        .enviar {
-            border-radius: 30px;
-            text-align: center;
-            height: 55px;
-            font-size: 25px;
-        }
-
-        .nome,
-        .nome-storage {
-            font-size: 25px !important;
-            font-weight: 600;
-        }
-
-        .bg-style {
-            background: #ff5d5d;
-            border-radius: 100%;
-            width: 72px;
-            height: 72px;
-            margin: 0 3px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-weight: 600;
-            position: relative;
-            box-shadow: 1px 1px 4px 0px black;
-        }
-
-        h5 {
-            font-size: 16px;
-            margin: 0;
-        }
-
-        p {
-            margin: 0;
-        }
-
-        .show {
-            display: block;
-            text-align: center;
-        }
-
-        .show-pic {
-            display: block;
-            /* margin: 0 20px 15px; */
-        }
-
-        .no-show {
-            display: none;
-        }
-
-        .seta {
-            color: black;
-            position: absolute;
-            width: 25px;
-            height: 25px;
-            background: white;
-            border-radius: 100%;
-            bottom: 3px;
-            right: -3px;
-            box-shadow: 1px 2px 4px 0px black;
-        }
-
-        .header-img {
-            background-color: #232323;
-            padding: 30px 0 50px;
-        }
-
-        .hid-scroll {
-            height: 55vh;
-            overflow-y: auto
-        }
-
-        .box-content {
-            flex-direction: column-reverse;
-        }
-
-        * {
-            scroll-behavior: smooth;
-        }
-
-        /* Hide scrollbar for Chrome, Safari and Opera */
-        .hid-scroll::-webkit-scrollbar {
-            display: none;
-            overflow-y: auto;
-        }
-
-        /* Hide scrollbar for IE, Edge and Firefox */
-        .hid-scroll {
-            -ms-overflow-style: none;
-            /* IE and Edge */
-            scrollbar-width: none;
-            /* Firefox */
-        }
-    </style>
 
     <section class="header-img">
         <div class="container">
             <div class="row justify-content-center align-items-center flex-column">
                 <!-- <h1 style="text-align: center; color: white;">PokeDay</h1> -->
-                <img src="./img/pokeday.png" alt="" style="width: 150px; margin: 15px auto;">
-                <input type="text" class="enviar w-25" placeholder="Escreva aqui...">
+                <img src="./assets/img/pokeday.png" alt="" style="width: 150px; margin: 15px auto;">
+                <input type="text" class="enviar" placeholder="Escreva aqui...">
                 <div class="container flex"
                     style="height: fit-content; display: flex; justify-content: center; align-items: center; position: relative;">
-                    <div class="d-flex flex-column"
-                        style="background: white; width: 300px; border-radius: 20px; position: absolute; bottom: -86px;">
+                    <div class="d-flex flex-column box-dicas"
+                        style="background: white; width: 300px; border-radius: 20px; position: absolute; top: 1px; z-index: 9999;">
                         <div class="d-flex justify-content-center align-items-center search">
                             <!-- <img class="col-md-2 show-pic" src="" alt="" id="fotoAprox"> -->
                             <h4 class="col-md-7 no-show" style="font-size: 17px" id="nomeAprox"></h4>
@@ -184,7 +62,7 @@ if ($resultCheck > 0) {
                         </div>
                     </div>
                 </div>
-                <button onclick="reset()" style="width: 75px; border-radius: 30px;">Reset</button>
+                <!-- <button onclick="reset()" style="width: 75px; border-radius: 30px;">Reset</button> -->
                 <!-- <img src="" alt="" class="img w-25"> -->
             </div>
         </div>
@@ -205,8 +83,9 @@ if ($resultCheck > 0) {
         const fotoNomesProximos = document.querySelectorAll("#fotoAprox")
         const nomesProximos = document.querySelectorAll("#nomeAprox")
         const mostrar = document.querySelectorAll('p')
-        const bg = document.querySelector("body > section:nth-child(3) > div > div > div");
-        const mainContent = document.querySelector("body > section:nth-child(3) > div > div.row.col-md-8.col-xs-6");
+        // const bg = document.querySelector("body > section:nth-child(3) > div > div > div");
+        const mainContent = document.querySelector(".box-content");
+        const boxDicas = document.querySelector(".box-dicas");
         const procurado = document.querySelectorAll('.search');
         var arImg = []
         var arInfo = []
@@ -260,7 +139,7 @@ if ($resultCheck > 0) {
                     })
                 }
 
-                console.log(arInfo)
+                // console.log(arInfo)
             }
         })
 
@@ -273,8 +152,10 @@ if ($resultCheck > 0) {
                         x.innerHTML = result[y]
                         x.classList.remove('no-show')
                         x.classList.add('show')
+                        procurado[y].classList.remove('no-show')
                     } else {
                         x.innerHTML = "";
+                        procurado[y].classList.add('no-show')
                     }
                 })
                 // fotoNomesProximos.forEach((x, y) => {
@@ -288,6 +169,7 @@ if ($resultCheck > 0) {
                     x.innerHTML = ""
                     x.classList.add('no-show')
                     x.classList.remove('show')
+                    procurado[y].classList.add('no-show')
                 })
             }
         })
@@ -352,7 +234,7 @@ if ($resultCheck > 0) {
                     // console.log("fim")
                     conferir(pokemonDia)
 
-                    console.log("fim")
+                    // console.log("fim")
                 }).then((data) => {
                     document.querySelector('.hid-scroll').scroll(0, 0)
                 })
@@ -417,7 +299,7 @@ if ($resultCheck > 0) {
                     // console.log("fim")
                     conferir(pokemonDia)
 
-                    console.log("fim")
+                    // console.log("fim")
                 }).then((data) => {
                     document.querySelector('.hid-scroll').scroll(0, 0)
                 })
@@ -425,13 +307,13 @@ if ($resultCheck > 0) {
 
         }
 
-        // pokeday('<?php echo $pokemonDia;?>')
+        // pokeday('<?php echo $pokemonDia; ?>')
 
         function novoBg(inform) {
 
 
             divbgwhite = document.createElement("div")
-            divbgwhite.classList.add('bgwhite')
+            divbgwhite.classList.add('bgwhite','justify-content-center')
             divbgwhite.classList.add('row')
 
             divintern1 = document.createElement("div")
@@ -442,11 +324,11 @@ if ($resultCheck > 0) {
 
             divintern1c1 = document.createElement("div")
             divintern1c1.classList.add('col-md-5')
-            divintern1c1.classList.add('col-sm-12')
+            divintern1c1.classList.add('col-sm-6')
 
             divintern1c2 = document.createElement("div")
             divintern1c2.classList.add('col-md-7')
-            divintern1c2.classList.add('col-sm-12')
+            divintern1c2.classList.add('col-sm-6')
 
             divintern2 = document.createElement("div")
             divintern2.classList.add('col-md-7')
@@ -569,7 +451,7 @@ if ($resultCheck > 0) {
 
         function toStorage(info) {
             tent = 'try-' + tentativas
-            console.log(tent)
+            // console.log(tent)
             localStorage.setItem(tent, JSON.stringify(arInfo))
         }
 
@@ -594,6 +476,7 @@ if ($resultCheck > 0) {
                 infoNames = data;
 
                 infoNames.results.forEach((x) => {
+                    if(!x.name.includes('-'))
                     nomesPokemons.push(x.name)
 
                 })
