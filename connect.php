@@ -7,7 +7,6 @@ $usuario = "root";
 $senha = "";
 date_default_timezone_set('America/Sao_Paulo');
 
-
 $mysqli = new mysqli($hostname, $usuario, $senha, $bancodedados);
 
 if ($mysqli->connect_errno) {
