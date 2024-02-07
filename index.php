@@ -19,6 +19,7 @@ if ($resultCheck > 0) {
         if ($row['data'] == intval(date('dmY'))) {
             // echo 'pokemon do dia é : ' . $row['pokemon'];
             $pokemonDia = $row['pokemon'];
+            $data = $row['data'];
         }
     }
 }
@@ -28,13 +29,13 @@ if ($resultCheck > 0) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokeday</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-        <link rel="stylesheet" href="./assets/css/main.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="./assets/css/main.css">
 </head>
 <header>
-    
+
 </header>
+
 <body style="background: #232323;">
 
 
@@ -44,10 +45,8 @@ if ($resultCheck > 0) {
                 <!-- <h1 style="text-align: center; color: white;">PokeDay</h1> -->
                 <img src="./assets/img/pokeday.png" alt="" style="width: 150px; margin: 15px auto;">
                 <input type="text" class="enviar" placeholder="Escreva aqui...">
-                <div class="container flex"
-                    style="height: fit-content; display: flex; justify-content: center; align-items: center; position: relative;">
-                    <div class="d-flex flex-column box-dicas"
-                        style="background: white; width: 300px; border-radius: 20px; position: absolute; top: 1px; z-index: 9999;">
+                <div class="container flex" style="height: fit-content; display: flex; justify-content: center; align-items: center; position: relative;">
+                    <div class="d-flex flex-column box-dicas" style="background: white; width: 300px; border-radius: 20px; position: absolute; top: 1px; z-index: 9999;">
                         <div class="d-flex justify-content-center align-items-center search">
                             <!-- <img class="col-md-2 show-pic" src="" alt="" id="fotoAprox"> -->
                             <h4 class="col-md-7 no-show" style="font-size: 17px" id="nomeAprox"></h4>
@@ -90,18 +89,24 @@ if ($resultCheck > 0) {
         var arImg = []
         var arInfo = []
         var nomesPokemons = []
+        var dataDb = <?php echo $data; ?>;
         result = nomesPokemons.filter((nomesPokemons) => nomesPokemons.includes("pidg"))
-        pokemonDia = ['salazzle', 'poison', 'fire', 12, 22.2, 'VII', 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/758.png']
+        pokemonDia = []
+
+        storeLocalData();
 
         window.onload = () => {
             if (!localStorage.tentativa) {
                 localStorage.tentativa = 0
             }
             tentativas = localStorage.tentativa
-            showStorage();
             // console.log(tentativas)
             conf = document.querySelectorAll('.col-md-2.bg-style')
-            conferir(pokemonDia)
+            setTimeout(() => {
+                showStorage();
+            }, 100)
+            // console.log('vindo do php: ' +<?php echo $data; ?>)
+            // console.log('vindo do js: '+ localStorage.hoje)
         }
 
         function reset() {
@@ -259,15 +264,6 @@ if ($resultCheck > 0) {
                 pokemonDia.push(infos.weight / 10)
 
 
-                // console.log(infos.name);
-                // console.log(infos.height);
-                // console.log(infos.weight / 10);
-                // infos.types.forEach((x) => { console.log(x.type.name) })
-
-                // imagem.src = infos.sprites.other.home.front_default;
-                // imagem.src = infos.sprites.front_default;
-
-
             }).then((data) => {
                 fetch('https://pokeapi.co/api/v2/pokemon-species/' + dat).then((response) => response.json()).then((data) => {
                     // console.log(data);
@@ -279,41 +275,22 @@ if ($resultCheck > 0) {
                     // imagem.src = infos2.sprites.other.home.front_default;
                     // imagem.src = infos2.sprites.front_default;
                     pokemonDia.push(infos.sprites.other.home.front_default);
-
+                }).then((data) => {
+                    console.log(conferir(pokemonDia))
                     setTimeout(() => {
-                        mostrar.forEach((x, y) => {
-                            x.innerHTML = pokemonDia[y];
-                        })
-
-
-                    }, 50)
-
-                }).then((data) => {
-                    let box = novoBg(pokemonDia)
-                    mainContent.appendChild(box)
-                    y = parseInt(localStorage.tentativa)
-                    y += 1
-                    localStorage.tentativa = y
-                    tentativas = localStorage.tentativa
-                    toStorage(1);
-                    // console.log("fim")
-                    conferir(pokemonDia)
-
-                    // console.log("fim")
-                }).then((data) => {
-                    document.querySelector('.hid-scroll').scroll(0, 0)
+                        conferir(pokemonDia)
+                    }, 100)
                 })
             })
 
         }
 
-        // pokeday('<?php echo $pokemonDia; ?>')
 
         function novoBg(inform) {
 
 
             divbgwhite = document.createElement("div")
-            divbgwhite.classList.add('bgwhite','justify-content-center')
+            divbgwhite.classList.add('bgwhite', 'justify-content-center')
             divbgwhite.classList.add('row')
 
             divintern1 = document.createElement("div")
@@ -457,7 +434,7 @@ if ($resultCheck > 0) {
 
         function showStorage() {
             a = localStorage;
-            for (i = 0; i < a.length; i++) {
+            for (i = 0; i < a.length-1; i++) {
                 if (i == 0) {
                     // console.log('faço nada')
                 } else {
@@ -469,6 +446,18 @@ if ($resultCheck > 0) {
             }
         }
 
+        function storeLocalData() {
+            if (!localStorage.hoje) {
+                data = new Date();
+                localStorage.hoje = parseInt(data.toLocaleDateString().replaceAll('/', ''));
+                // console.log('criei um local para hoje')
+            }
+            if (dataDb != localStorage.hoje) {
+                localStorage.clear()
+                storeLocalData()
+            }
+        }
+
         function showNamesProximity(pesq) {
             dat = pesq.toLowerCase();
             fetch('https://pokeapi.co/api/v2/pokemon/?limit=-1&offset=0').then((response) => response.json()).then((data) => {
@@ -476,8 +465,8 @@ if ($resultCheck > 0) {
                 infoNames = data;
 
                 infoNames.results.forEach((x) => {
-                    if(!x.name.includes('-'))
-                    nomesPokemons.push(x.name)
+                    if (!x.name.includes('-'))
+                        nomesPokemons.push(x.name)
 
                 })
             })
@@ -492,6 +481,7 @@ if ($resultCheck > 0) {
                 alt = i + 2;
                 pes = i + 3;
                 gen = i + 4;
+
                 tipo1 = conf[i].children[1].innerHTML;
                 tipo2 = conf[p].children[1].innerHTML;
                 altura = parseFloat(conf[alt].children[1].innerHTML);
@@ -499,24 +489,36 @@ if ($resultCheck > 0) {
                 geracao = conf[gen].children[1].innerHTML;
 
                 // ----------------------------------------------- CONFERIR TIPO 1 DO POKEMON DO DIA -----------------------------------------------
-                if (tipo1 == pokemonDia[1]) {
-                    // console.log('tipo 1: ' + tipo1 + ' ' + i)
-                    conf[i].style.background = "rgb(128 239 138)"
+                // if (tipo1 == pokemonDia[1]) {
+                //     // console.log('tipo 1: ' + tipo1 + ' ' + i)
+                //     conf[i].style.background = "rgb(128 239 138)"
+                // }
+                // if (tipo2 == pokemonDia[1]) {
+                //     // console.log('tipo 2: ' + tipo2 + ' ' + i)
+                //     conf[p].style.background = "rgb(239 231 128)"
+                // }
+                if (tipo1 == pokemonDia[2]) {
+                    conf[i].style.background = "rgb(239 231 128)"
                 }
                 if (tipo2 == pokemonDia[1]) {
-                    // console.log('tipo 2: ' + tipo2 + ' ' + i)
                     conf[p].style.background = "rgb(239 231 128)"
+                }
+                if (tipo1 == pokemonDia[1]) {
+                    conf[i].style.background = "rgb(128 239 138)"
+                }
+                if (tipo2 == pokemonDia[2]) {
+                    conf[p].style.background = "rgb(128 239 138)"
                 }
 
                 // ----------------------------------------------- CONFERIR TIPO 2 DO POKEMON DO DIA -----------------------------------------------
-                if (tipo1 == pokemonDia[2]) {
-                    // console.log('tipo 1: ' + tipo1 + ' ' + i)
-                    conf[i].style.background = "rgb(239 231 128)"
-                }
-                if (tipo2 == pokemonDia[2]) {
-                    // console.log('tipo 2: ' + tipo2 + ' ' + i)
-                    conf[p].style.background = "rgb(128 239 138)"
-                }
+                // if (tipo1 == pokemonDia[2]) {
+                //     // console.log('tipo 1: ' + tipo1 + ' ' + i)
+                //     conf[i].style.background = "rgb(239 231 128)"
+                // }
+                // if (tipo2 == pokemonDia[2]) {
+                //     // console.log('tipo 2: ' + tipo2 + ' ' + i)
+                //     conf[p].style.background = "rgb(128 239 138)"
+                // }
 
                 // ----------------------------------------------- CONFERIR ALTURA DO POKEMON DO DIA -----------------------------------------------
                 if (altura == pokemonDia[3]) {
@@ -538,11 +540,9 @@ if ($resultCheck > 0) {
 
             }
         }
-
+        pokeday('<?php echo $pokemonDia; ?>')
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
 </body>
 
