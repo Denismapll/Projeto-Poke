@@ -1,7 +1,7 @@
 <?php 
 
 
-$hostname = "localhost";
+$hostname = "localhost:3325";
 $bancodedados = "pokemonsdias";
 $usuario = "root";
 $senha = "";
